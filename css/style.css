@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(61, 57, 36);
+    background-color: rgb(53, 37, 24);
     margin: 0;
     padding: 0;
 }
@@ -24,7 +24,8 @@ body {
 
 .data-hora {
     text-align: center;
-    font-family: "Nanum Gothic Coding", monospace;
+    color: white;
+    font-family: 'Georgia', serif;
     font-weight: 400;
     font-style: normal;
 }
@@ -39,7 +40,7 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: rgb(128, 47, 0);
+    background-color: rgb(141, 80, 45);
     padding: 20px;
 }
 
@@ -75,7 +76,7 @@ body {
 
 #btn-bater-ponto {
     padding: 20px;
-    background-color: rgb(53, 27, 5);
+    background-color: rgb(94, 59, 30);
     color: white;
     font-size: 1.3rem;
     border: 0px;
