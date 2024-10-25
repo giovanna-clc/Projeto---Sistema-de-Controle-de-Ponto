@@ -1,3 +1,27 @@
+body {
+    background-color: rgb(61, 57, 36);
+    margin: 0;
+    padding: 0;
+}
+
+#titulo {
+    text-align: center;
+    color: rgb(236, 202, 182); 
+}
+
+.rodape {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    background-color: rgb(107, 74, 32);
+    font-family: 'Georgia', serif;
+}
+
 .data-hora {
     text-align: center;
     font-family: "Nanum Gothic Coding", monospace;
@@ -15,7 +39,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: green;
+    background-color: rgb(128, 47, 0);
     padding: 20px;
 }
 
@@ -51,7 +75,7 @@
 
 #btn-bater-ponto {
     padding: 20px;
-    background-color: blue;
+    background-color: rgb(53, 27, 5);
     color: white;
     font-size: 1.3rem;
     border: 0px;
