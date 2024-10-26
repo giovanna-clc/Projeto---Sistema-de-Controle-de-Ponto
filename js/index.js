@@ -21,34 +21,6 @@ function printCurrentHour() {
     horaMinSeg.textContent = getCurrentHour();
 }
 
-// TO-DO:
-// alterar o nome da função
-function register() {
-    dialogData.textContent = "Data: " + getCurrentDate();
-    dialogHora.textContent = "Hora: " + getCurrentHour();
-    
-    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-    if(lastTypeRegister) {
-        const typeRegister   = document.getElementById("tipos-ponto");
-        typeRegister.value   = nextRegister[lastTypeRegister];
-        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
-        document.getElementById("dialog-last-register").textContent = lastRegisterText;
-    }
-
-    // TO-DO
-    // Como "matar" o intervalo a cada vez que o dialog é fechado?
-    setInterval(() => {
-        dialogHora.textContent = "Hora: " + getCurrentHour();
-    }, 1000);
-
-    dialogPonto.showModal();
-}
-
-function register_justificativa() {
-
-    dialogJustiicar.showModal();
-}
-
 
 // Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
 function getRegisterLocalStorage() {
@@ -110,6 +82,58 @@ let lastTypeRegister = localStorage.getItem("lastTypeRegister");
     }
 //Fim dados padrões
 
+
+//Alerta registro
+// TO-DO:
+// Problema: os 5 segundos continuam contando
+const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
+btnCloseAlertRegister.addEventListener("click", () => {
+    divAlertaRegistroPonto.classList.remove("show");
+    divAlertaRegistroPonto.classList.add("hidden");
+});
+//Fim alerta registro
+
+const dialogData = document.getElementById("dialog-data");
+const dialogHora = document.getElementById("dialog-hora");
+const dialogPonto = document.getElementById("dialog-ponto");
+//Fim registro
+
+//------------------------------------------------------------------------------------------
+
+//Registro
+
+function register() {
+    dialogData.textContent = "Data: " + getCurrentDate();
+    dialogHora.textContent = "Hora: " + getCurrentHour();
+    
+    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
+    if(lastTypeRegister) {
+        const typeRegister   = document.getElementById("tipos-ponto");
+        typeRegister.value   = nextRegister[lastTypeRegister];
+        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
+        document.getElementById("dialog-last-register").textContent = lastRegisterText;
+    }
+
+    // TO-DO
+    // Como "matar" o intervalo a cada vez que o dialog é fechado?
+    setInterval(() => {
+        dialogHora.textContent = "Hora: " + getCurrentHour();
+    }, 1000);
+
+    dialogPonto.showModal();
+}
+
+//Formulario de registro de ponto
+const btnBaterPonto = document.getElementById("btn-bater-ponto");
+btnBaterPonto.addEventListener("click", register);
+
+//Fechamento forms manual
+const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+});
+//Fim fechamento manual
+
 //Regsitro e save do ponto
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
@@ -150,46 +174,104 @@ btnDialogBaterPonto.addEventListener("click", async () => {
 });
 //Fim resgistro save
 
-//Alerta registro
-// TO-DO:
-// Problema: os 5 segundos continuam contando
-const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
-btnCloseAlertRegister.addEventListener("click", () => {
-    divAlertaRegistroPonto.classList.remove("show");
-    divAlertaRegistroPonto.classList.add("hidden");
-});
-//Fim alerta registro
-
-//Formulario de registro de ponto
-const btnBaterPonto = document.getElementById("btn-bater-ponto");
-btnBaterPonto.addEventListener("click", register);
-
-
-const dialogData = document.getElementById("dialog-data");
-const dialogHora = document.getElementById("dialog-hora");
-const dialogPonto = document.getElementById("dialog-ponto");
-//Fechamento forms manual
-const btnDialogFechar = document.getElementById("btn-dialog-fechar");
-btnDialogFechar.addEventListener("click", () => {
-    dialogPonto.close();
-});
-//Fim fechamento manual
 //Fim registro
 
-const btnBaterJustificar = document.getElementById("btn-bater-justificar");
-btnBaterJustificar.addEventListener("click", register_justificativa);
+//------------------------------------------------------------------------------------------
 
+//Jusificativa
 function toggleFileInput() {
     const fileInputContainer = document.getElementById("fileInputContainer");
     fileInputContainer.style.display = document.getElementById("toggleFileCheckbox").checked ? "block" : "none";
 }
 
-const dialogJustiicar = document.getElementById("dialog-justificativa");
-    //Fechamento forms manual
-    const Justificativa = document.getElementById("btn-dialog-fechar-justificatica");
-    Justificativa.addEventListener("click", () => {
-        dialogJustiicar.close();
-    });
+function registerJustificativa() {
+
+    // Carrega a última justificativa registrada, se existir
+    let lastAbsenceDate = localStorage.getItem("lastAbsenceDate");
+    if (lastAbsenceDate) {
+        const lastAbsenceText = `Última justificativa: ${lastAbsenceDate} - ${localStorage.getItem("lastAbsenceTime")} | Arquivo anexado: ${localStorage.getItem("absenceFileAttached")}`;
+        document.getElementById("dialog-last-register-justificativa").textContent = lastAbsenceText;
+    }
+
+    // Atualiza a hora a cada segundo
+    setInterval(() => {
+        document.getElementById("dialog-hora-justificativa").textContent = "Hora: " + getCurrentHour();
+    }, 1000);
+
+    dialogJustificativa.showModal();
+}
+
+// Botão para abrir o diálogo de justificativa
+const btnBaterJustificar = document.getElementById("btn-bater-justificar");
+btnBaterJustificar.addEventListener("click", registerJustificativa);
+
+// Fechamento manual do formulário de justificativa
+const dialogJustificativa = document.getElementById("dialog-justificativa");
+const btnFecharJustificativa = document.getElementById("btn-dialog-fechar-justificatica");
+btnFecharJustificativa.addEventListener("click", () => {
+    dialogJustificativa.close();
+});
+
+// Botão para confirmar o registro da justificativa
+const btnDialogJustificativa = document.getElementById("btn-dialog-bater-justificativa");
+const divAlertaRegistroJustificativa = document.getElementById("alerta-registro-justificativa");
+
+btnDialogJustificativa.addEventListener("click", async () => {
+    const absenceDate = document.getElementById("absenceDate").value;
+    const absenceFile = document.getElementById("absenceFile");
+    const observationText = document.getElementById("observationText").value;
+    
+    if (!absenceDate) {
+        alert("Por favor, selecione uma data de ausência.");
+        return;
+    }
+
+    // Obtém a posição atual do usuário (se necessário)
+    let userCurrentPosition = await getCurrentPosition();
+
+    // Cria o objeto de justificativa
+    let justificativa = {
+        "data": absenceDate,
+        "hora": getCurrentHour(),
+        "localizacao": userCurrentPosition,
+        "id": 1, // ID único ou pode ser incrementado
+        "arquivoAnexado": absenceFile.files.length > 0 ? "Sim" : "Não",
+        "observacao": observationText // Adiciona observação, se fornecida
+    };
+
+    console.log(justificativa);
+
+    // Salva o registro da justificativa no localStorage
+    saveRegisterLocalStorage(justificativa);
+
+    // Atualiza o último registro da justificativa no localStorage
+    localStorage.setItem("lastAbsenceDate", justificativa.data);
+    localStorage.setItem("lastAbsenceTime", justificativa.hora);
+    localStorage.setItem("absenceFileAttached", justificativa.arquivoAnexado);
+
+    dialogJustificativa.close();
+
+    // Mostra um alerta de registro da justificativa
+    divAlertaRegistroJustificativa.classList.remove("hidden");
+    divAlertaRegistroJustificativa.classList.add("show");
+
+    setTimeout(() => {
+        divAlertaRegistroJustificativa.classList.remove("show");
+        divAlertaRegistroJustificativa.classList.add("hidden");
+    }, 5000);
+});
+
+// Função para alternar a visibilidade do campo de arquivo
+function toggleFileInput() {
+    const fileInputContainer = document.getElementById("fileInputContainer");
+    const checkbox = document.getElementById("toggleFileCheckbox");
+    if (checkbox.checked) {
+        fileInputContainer.style.display = "block";
+    } else {
+        fileInputContainer.style.display = "none";
+    }
+}
+//Fim justificativa
 
 //Armazenamento local dos dados
 let registerLocalStorage = getRegisterLocalStorage();

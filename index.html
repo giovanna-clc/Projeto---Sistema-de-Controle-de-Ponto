@@ -50,15 +50,18 @@
 
         <!--Fim dados padrões-->
         <div id="div-btn-bater-justificar">
-            <button id="btn-bater-justificar">Justificar</button><!--Botão de abertura do form-->
+            <button id="btn-bater-justificar">Justificar</button>
         </div>
-
+        
+        <!-- Diálogo para justificar a ausência -->
         <dialog id="dialog-justificativa">
             <h2>Justificar Ausência</h2>
-            <input type="date" id="absenceDate" />
+        
+            <input type="date" id="absenceDate" required />
             <p></p>
             <textarea id="observationText" placeholder="Observação (opcional)" rows="3"></textarea>
             <p></p>
+            
             <label>
                 <input type="checkbox" id="toggleFileCheckbox" onclick="toggleFileInput()" />
                 Anexar arquivo
@@ -68,10 +71,16 @@
                 <input type="file" id="absenceFile" />
             </div>
             <p></p>
-            <button onclick="registerAbsence()">Registrar Ausência</button>
-            <p id="dialog-last-register"></p>
+            
+            <button id="btn-dialog-bater-justificativa">Registrar Ausência</button>
+            <p id="dialog-last-register-justificativa"></p>
             <button id="btn-dialog-fechar-justificatica">X</button>
         </dialog>
+        
+        <div id="alerta-registro-justificativa" class="hidden">
+            <p>Justificativa registrada com sucesso!</p>
+            <button id="alerta-registro-justificativa-fechar">X</button>
+        </div>        
 
     <!-- TO-DO: -->
     <!-- criar histórico dos últimos n registros-->
