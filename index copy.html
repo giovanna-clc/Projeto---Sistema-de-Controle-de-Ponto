@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de Ponto</title>
+    <link rel="stylesheet" href="">
+</head>
+<body>
+    <div class="container">
+        <h1>Controle de Ponto</h1>
+        <p id="currentDateTime"></p>
+        
+        <!-- Botões de Registro -->
+        <div class="buttons">
+            <button onclick="openPointDialog('entrada')">Registrar Entrada</button>
+            <button onclick="openPointDialog('saida')">Registrar Saída</button>
+            <button onclick="openPointDialog('entradaIntervalo')">Início do Intervalo</button>
+            <button onclick="openPointDialog('saidaIntervalo')">Fim do Intervalo</button>
+        </div>
+        
+        <!-- Relatório de Pontos -->
+        <div class="report">
+            <h2>Relatório de Pontos</h2>
+            <ul id="pointReport"></ul>
+        </div>
+
+        <!-- Saldo de Horas e Cálculo de Salário -->
+        <div class="balance">
+            <h2>Saldo de Horas</h2>
+            <p id="balanceDisplay"></p>
+            <h2>Cálculo de Salário</h2>
+            <input type="number" id="hourlyRate" placeholder="Valor por Hora (R$)" />
+            <button onclick="calculateSalary()">Calcular Salário</button>
+            <p id="salaryDisplay"></p>
+        </div>
+    </div>
+
+    <!-- Dialog de Registro de Ponto -->
+    <div id="pointDialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close-btn" onclick="closeDialog('pointDialog')">&times;</span>
+            <button class="justify-btn" onclick="openDialog('absenceDialog')">Justificar Falta</button>
+            <h2>Registrar Ponto</h2>
+            <p id="pointType"></p>
+            <textarea id="observationText" placeholder="Observação (opcional)" rows="3"></textarea>
+            <button onclick="registerPoint()">Registrar Ponto</button>
+        </div>
+    </div>
+
+    <!-- Dialog de Justificativa de Falta -->
+    <div id="absenceDialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close-btn" onclick="closeDialog('absenceDialog')">&times;</span>
+            <h2>Justificar Ausência</h2>
+            <input type="date" id="absenceDate" />
+            <input type="file" id="absenceFile" />
+            <button onclick="registerAbsence()">Registrar Ausência</button>
+        </div>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

@@ -44,6 +44,12 @@ function register() {
     dialogPonto.showModal();
 }
 
+function register_justificativa() {
+
+    dialogJustiicar.showModal();
+}
+
+
 // Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
 function getRegisterLocalStorage() {
     let registers = localStorage.getItem("register");
@@ -107,6 +113,7 @@ let lastTypeRegister = localStorage.getItem("lastTypeRegister");
 //Regsitro e save do ponto
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
 const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
+
 btnDialogBaterPonto.addEventListener("click", async () => {
     const typeRegister = document.getElementById("tipos-ponto");
     let lastTypeRegister = localStorage.getItem("lastTypeRegister");
@@ -156,16 +163,33 @@ btnCloseAlertRegister.addEventListener("click", () => {
 //Formulario de registro de ponto
 const btnBaterPonto = document.getElementById("btn-bater-ponto");
 btnBaterPonto.addEventListener("click", register);
+
+
 const dialogData = document.getElementById("dialog-data");
 const dialogHora = document.getElementById("dialog-hora");
 const dialogPonto = document.getElementById("dialog-ponto");
-    //Fechamento forms manual
-    const btnDialogFechar = document.getElementById("btn-dialog-fechar");
-    btnDialogFechar.addEventListener("click", () => {
-        dialogPonto.close();
-    });
-    //Fim fechamento manual
+//Fechamento forms manual
+const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+});
+//Fim fechamento manual
 //Fim registro
+
+const btnBaterJustificar = document.getElementById("btn-bater-justificar");
+btnBaterJustificar.addEventListener("click", register_justificativa);
+
+function toggleFileInput() {
+    const fileInputContainer = document.getElementById("fileInputContainer");
+    fileInputContainer.style.display = document.getElementById("toggleFileCheckbox").checked ? "block" : "none";
+}
+
+const dialogJustiicar = document.getElementById("dialog-justificativa");
+    //Fechamento forms manual
+    const Justificativa = document.getElementById("btn-dialog-fechar-justificatica");
+    Justificativa.addEventListener("click", () => {
+        dialogJustiicar.close();
+    });
 
 //Armazenamento local dos dados
 let registerLocalStorage = getRegisterLocalStorage();

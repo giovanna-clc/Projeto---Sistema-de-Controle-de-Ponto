@@ -45,8 +45,34 @@
             <p id="dialog-last-register"></p>
             <button id="btn-dialog-fechar">X</button>
         <!--Fim caixa de opções-->
-    <!--Fim cadastro-->
-    </dialog>
+        <!--Fim cadastro-->
+        </dialog>
+
+        <!--Fim dados padrões-->
+        <div id="div-btn-bater-justificar">
+            <button id="btn-bater-justificar">Justificar</button><!--Botão de abertura do form-->
+        </div>
+
+        <dialog id="dialog-justificativa">
+            <h2>Justificar Ausência</h2>
+            <input type="date" id="absenceDate" />
+            <p></p>
+            <textarea id="observationText" placeholder="Observação (opcional)" rows="3"></textarea>
+            <p></p>
+            <label>
+                <input type="checkbox" id="toggleFileCheckbox" onclick="toggleFileInput()" />
+                Anexar arquivo
+            </label>
+            <div id="fileInputContainer" style="display: none;">
+                <p></p>
+                <input type="file" id="absenceFile" />
+            </div>
+            <p></p>
+            <button onclick="registerAbsence()">Registrar Ausência</button>
+            <p id="dialog-last-register"></p>
+            <button id="btn-dialog-fechar-justificatica">X</button>
+        </dialog>
+
     <!-- TO-DO: -->
     <!-- criar histórico dos últimos n registros-->
     <script src="js/index.js"></script>
