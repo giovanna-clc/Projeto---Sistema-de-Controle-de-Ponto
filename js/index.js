@@ -63,8 +63,8 @@ function saveRegisterLocalStorage(register) {
 let registerLocalStorageJusti = getJustificativaLocalStorage();
 
 function getJustificativaLocalStorage() {
-    const registers = localStorage.getItem("justificativa");
-    return registers ? JSON.parse(registers) : [];
+    const justificativas = localStorage.getItem("justificativa");
+    return justificativas ? JSON.parse(justificativas) : [];
 }
 
 
@@ -128,7 +128,8 @@ const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 
 btnDialogBaterPonto.addEventListener("click", async () => {
     const typeRegister = document.getElementById("tipos-ponto");
-    
+    const observationText = document.getElementById("observationText").value;
+
     let userCurrentPosition = await getCurrentPosition();
     
     let ponto = {
@@ -136,8 +137,9 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         "hora": getCurrentHour(),
         "localizacao": userCurrentPosition,
         "id": 1,
-        "tipo": typeRegister.value
-    }
+        "tipo": typeRegister.value,
+        "observacao": observationText || "-"
+    };
     
     saveRegisterLocalStorage(ponto);
     
@@ -153,8 +155,8 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         divAlertaRegistroPonto.classList.remove("show");
         divAlertaRegistroPonto.classList.add("hidden");
     }, 5000);
-    
 });
+
 
 let lastTypeRegister = localStorage.getItem("lastTypeRegister");
     if(lastTypeRegister) {
@@ -200,7 +202,7 @@ const divAlertaRegistroJustificativa = document.getElementById("alerta-registro-
 
 btnDialogJustificativa.addEventListener("click", async () => {
     const absenceDate = document.getElementById("absenceDate").value;
-    const observationText = document.getElementById("observationText").value;
+    const observationText = document.getElementById("observationTextJus").value;
 
     if (!absenceDate) {
         alert("Por favor, selecione uma data de ausência.");

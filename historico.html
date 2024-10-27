@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Pontos e Justificativas</title>
-    <link rel="stylesheet" href="css/style.css"> <!-- Substitua pelo caminho correto -->
+    <link rel="stylesheet" href="">
 </head>
 <body>
     <h1>Histórico de Pontos e Justificativas</h1>
@@ -13,25 +13,31 @@
         <button onclick="window.location.href='index.html'">Home</button>
     </div>
 
-    <!-- Filtros -->
     <div id="filtros">
-        <button onclick="filtrarHistorico('ponto')">Histórico de Pontos</button>
+        <button onclick="filtrarHistorico('registro')">Histórico de Registros</button>
         <button onclick="filtrarHistorico('justificativa')">Histórico de Justificativas</button>
-        <button onclick="filtrarHistorico('todos')">Mostrar Todos</button> <!-- Corrigido -->
+        <button onclick="filtrarHistorico('todos')">Mostrar Todos</button>
     </div>
 
-    <!-- Filtro de Período -->
     <div id="periodo-filtro">
-        <label for="start-date">Data Inicial:</label>
-        <input type="date" id="start-date">
+        <label>Filtrar por Período:</label>
+        <select id="filter-period">
+            <option value="all">Todos os registros</option>
+            <option value="last-week">Última Semana</option>
+            <option value="last-month">Último Mês</option>
+            <option value="custom">Personalizado</option>
+        </select>
         
-        <label for="end-date">Data Final:</label>
-        <input type="date" id="end-date">
-
-        <button onclick="renderHistorico()">Aplicar Filtro de Data</button>
+        <div id="custom-date-range" style="display: none;">
+            <label for="start-date">Data Inicial:</label>
+            <input type="date" id="start-date">
+            
+            <label for="end-date">Data Final:</label>
+            <input type="date" id="end-date">
+        </div>
+        <button onclick="renderHistorico()">Aplicar Filtro</button>
     </div>
 
-    <!-- Tabela de Histórico -->
     <table id="tabela-historico">
         <thead>
             <tr>
@@ -39,11 +45,10 @@
                 <th>Hora</th>
                 <th>Tipo</th>
                 <th>Observação</th>
-                <th>Ações</th>
+                <th>Documentos</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Registros serão preenchidos dinamicamente -->
         </tbody>
     </table>
 

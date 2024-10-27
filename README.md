@@ -62,7 +62,7 @@ relatório de marcações;
 ------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar uma justificativa para uma ausência,
 inclusive com a possibilidade de fazer um upload de arquivo;
-  *Em desenvolvimento*
+  *Feito*
 ------------------------------------------------------------------------------------------
   ● Por padrão, a marcação de entrada e saída de expediente e intervalo irá
 considerar a data, hora e localização atuais do usuário no momento do
@@ -72,7 +72,7 @@ registro;
   ● Usuário pode adicionar uma observação a um registro
 ○ Esses registros devem possuir marcação diferenciada no
 relatório de marcações.
-  *A fazer*
+  *Feito*
 ------------------------------------------------------------------------------------------
   ● Usuário deve poder editar os registros
 ○ Esses registros devem possuir marcação diferenciada no
