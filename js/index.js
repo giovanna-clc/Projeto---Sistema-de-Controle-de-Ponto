@@ -218,7 +218,6 @@ const divAlertaRegistroJustificativa = document.getElementById("alerta-registro-
 
 btnDialogJustificativa.addEventListener("click", async () => {
     const absenceDate = document.getElementById("absenceDate").value;
-    const absenceFile = document.getElementById("absenceFile");
     const observationText = document.getElementById("observationText").value;
     
     if (!absenceDate) {
@@ -230,14 +229,20 @@ btnDialogJustificativa.addEventListener("click", async () => {
     let userCurrentPosition = await getCurrentPosition();
 
     // Cria o objeto de justificativa
+    const absenceFile = document.getElementById("absenceFile").files[0]; // Obtenha o arquivo
+
     let justificativa = {
-        "data": absenceDate,
-        "hora": getCurrentHour(),
-        "localizacao": userCurrentPosition,
-        "id": 1, // ID único ou pode ser incrementado
-        "arquivoAnexado": absenceFile.files.length > 0 ? "Sim" : "Não",
-        "observacao": observationText // Adiciona observação, se fornecida
+        data: absenceDate,
+        hora: getCurrentHour(),
+        localizacao: userCurrentPosition,
+        id: 1, // ou outro ID único
+        tipo: "justificativa",
+        arquivoAnexado: absenceFile ? URL.createObjectURL(absenceFile) : "", // Gera URL temporária
+        nomeArquivo: absenceFile ? absenceFile.name : "", // Salva o nome do arquivo
+        observacao: observationText || "-"
     };
+
+
 
     console.log(justificativa);
 
@@ -272,6 +277,93 @@ function toggleFileInput() {
     }
 }
 //Fim justificativa
+
+//------------------------------------------------------------------------------------------
+
+//Inicio histórico
+
+function carregarHistorico() {
+    const registros = JSON.parse(localStorage.getItem("register")) || [];
+    console.log("Registros carregados:", registros); // Adiciona log para verificação
+    atualizarTabela(registros);
+}
+
+function filtrarHistorico(tipo) {
+    const registros = JSON.parse(localStorage.getItem("register")) || [];
+
+    let registrosFiltrados;
+    if (tipo === 'ponto') {
+        registrosFiltrados = registros.filter(reg => 
+            reg.tipo === 'entrada' || reg.tipo === 'intervalo' || reg.tipo === 'volta-intervalo' || reg.tipo === 'saida'
+        );
+    } else if (tipo === 'justificativa') {
+        registrosFiltrados = registros.filter(reg => reg.tipo === 'justificativa');
+    } else {
+        registrosFiltrados = registros; // Todos os registros
+    }
+
+    console.log("Registros filtrados:", registrosFiltrados); // Verificação
+    atualizarTabela(registrosFiltrados);
+}
+
+
+
+// Atualizar a tabela com os dados filtrados
+function atualizarTabela(registros) {
+    const tbody = document.querySelector("#tabela-historico tbody");
+    tbody.innerHTML = ""; // Limpa a tabela
+
+    if (registros.length === 0) {
+        const row = document.createElement("tr");
+        const emptyCell = document.createElement("td");
+        emptyCell.textContent = "Nenhum registro encontrado";
+        emptyCell.colSpan = 4;
+        row.appendChild(emptyCell);
+        tbody.appendChild(row);
+        return;
+    }
+
+    registros.forEach(registro => {
+        const row = document.createElement("tr");
+
+        const dataCell = document.createElement("td");
+        dataCell.textContent = registro.data;
+        row.appendChild(dataCell);
+
+        const horaCell = document.createElement("td");
+        horaCell.textContent = registro.hora;
+        row.appendChild(horaCell);
+
+        const tipoCell = document.createElement("td");
+        tipoCell.textContent = registro.tipo;
+        row.appendChild(tipoCell);
+
+        const obsCell = document.createElement("td");
+        obsCell.textContent = registro.observacao || "-";
+        row.appendChild(obsCell);
+
+        const cellArquivo = row.insertCell();
+        if (registro.arquivoAnexado) {
+            const link = document.createElement("a");
+            link.href = registro.arquivoAnexado;
+            link.textContent = registro.nomeArquivo; // Exibe o nome do arquivo
+            link.target = "_blank"; // Abre em uma nova aba
+            cellArquivo.appendChild(link);
+        } else {
+            cellArquivo.textContent = "Nenhum"; // Indica ausência de arquivo
+        }
+
+        tbody.appendChild(row);
+    });
+}
+
+
+// Carrega o histórico ao abrir a página
+document.addEventListener("DOMContentLoaded", carregarHistorico);
+console.log(localStorage.getItem("register"));
+
+
+//Fim histórico
 
 //Armazenamento local dos dados
 let registerLocalStorage = getRegisterLocalStorage();

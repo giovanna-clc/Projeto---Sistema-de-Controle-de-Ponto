@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Pontos e Justificativas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>Histórico de Pontos e Justificativas</h1>
+
+    <div id="div-btn-historico"></div>
+        <button onclick="window.location.href='index.html'">home</button>
+    </div>
+    
+    <!-- Filtros -->
+    <div id="filtros">
+        <button onclick="filtrarHistorico('ponto')">Histórico de Pontos</button>
+        <button onclick="filtrarHistorico('justificativa')">Histórico de Justificativas</button>
+        <button onclick="filtrarHistorico('todos')">Mostrar Todos</button>
+    </div>
+    
+    <!-- Tabela de Histórico -->
+    <table id="tabela-historico">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Tipo</th>
+                <th>Observação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Registros serão preenchidos dinamicamente -->
+        </tbody>
+    </table>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
