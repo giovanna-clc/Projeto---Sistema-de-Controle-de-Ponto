@@ -41,28 +41,44 @@ do grupo não tenham implementado essas funcionalidades durante as aulas, podem
 basear-se no repositório da disciplina como ponto de partida para o trabalho.
 
 Requisitos mínimos:
-
+------------------------------------------------------------------------------------------
   ● Usuário deve poder visualizar a data e hora atual na página principal do
 sistema;
+  *Feito*
+------------------------------------------------------------------------------------------  
   ● Usuário deve poder registrar um ponto de entrada e saída do
 expediente;
+  *Feito*
+------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar um ponto de entrada e saída do intervalo;
+  *Feito*
+------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar um ponto no passado (dias anteriores
 ao atual)
     ○ Esse registro deve possuir uma marcação diferenciada no
 relatório de marcações;
     ○ Não deve ser permitida marcação em data futura
+  *A fazer*
+------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar uma justificativa para uma ausência,
 inclusive com a possibilidade de fazer um upload de arquivo;
+  *Em desenvolvimento*
+------------------------------------------------------------------------------------------
   ● Por padrão, a marcação de entrada e saída de expediente e intervalo irá
 considerar a data, hora e localização atuais do usuário no momento do
 registro;
+  *Feito*
+------------------------------------------------------------------------------------------
   ● Usuário pode adicionar uma observação a um registro
 ○ Esses registros devem possuir marcação diferenciada no
 relatório de marcações.
+  *A fazer*
+------------------------------------------------------------------------------------------
   ● Usuário deve poder editar os registros
 ○ Esses registros devem possuir marcação diferenciada no
 relatório de marcações.
+  *A fazer *
+------------------------------------------------------------------------------------------
   ● Usuário deve poder visualizar um relatório com os horários de
 entrada e saída, inclusive de intervalos
     ○ O relatório deve, preferencialmente, ser apresentado em uma
@@ -78,6 +94,8 @@ não pode ser excluído;
 correspondência no localstorage.
 ○ Deve ser possível filtrar os registros por período
       ■ Último mês e última semana, no mínimo.
+
+------------------------------------------------------------------------------------------
       
 Critérios de Avaliação
 
