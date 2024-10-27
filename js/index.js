@@ -1,6 +1,7 @@
-// TO-DO:
-// Organizar código-fonte,
-//Funções
+//------------------------------------------------------------------------------------------
+
+//Funções de data
+
 function getCurrentDate() {
     const date = new Date();
     return String(date.getDate()).padStart(2, '0') + "/" + String((date.getMonth() + 1)).padStart(2, '0') + "/" + String(date.getFullYear()).padStart(2, '0');
@@ -21,17 +22,9 @@ function printCurrentHour() {
     horaMinSeg.textContent = getCurrentHour();
 }
 
+//------------------------------------------------------------------------------------------
 
-// Esta função deve retornar sempre um ARRAY, mesmo que seja vazio
-function getRegisterLocalStorage() {
-    let registers = localStorage.getItem("register");
-    
-    if(!registers) {
-        return [];
-    }
-    
-    return JSON.parse(registers); // converte de JSON para Array
-}
+// Funcao de localizacao
 
 async function getCurrentPosition() {
     return new Promise((resolve, reject) => {
@@ -47,6 +40,19 @@ async function getCurrentPosition() {
         });
     });
 }
+
+//------------------------------------------------------------------------------------------
+
+//funcoes de save
+
+let registerLocalStorage = getRegisterLocalStorage();
+
+function getRegisterLocalStorage() {
+    const registers = localStorage.getItem("register");
+    return registers ? JSON.parse(registers) : [];
+}
+
+
 function saveRegisterLocalStorage(register) {
     const typeRegister = document.getElementById("tipos-ponto");
     registerLocalStorage.push(register); // Array
@@ -54,53 +60,46 @@ function saveRegisterLocalStorage(register) {
     localStorage.setItem("lastTypeRegister", typeRegister.value);
 } 
 
-//Fim funções
+let registerLocalStorageJusti = getJustificativaLocalStorage();
 
+function getJustificativaLocalStorage() {
+    const registers = localStorage.getItem("justificativa");
+    return registers ? JSON.parse(registers) : [];
+}
+
+
+function saveJustificativaLocalStorage(register) {
+    registerLocalStorageJusti.push(register);
+    localStorage.setItem("justificativa", JSON.stringify(registerLocalStorageJusti));
+} 
+
+//------------------------------------------------------------------------------------------
 
 //Dados padrões apresentação
 const diaSemana = document.getElementById("dia-semana");
 const diaMesAno = document.getElementById("dia-mes-ano");
 const horaMinSeg = document.getElementById("hora-min-seg");
-    //Atualiza para a data de hoje
-    diaSemana.textContent = getWeekDay();
-    diaMesAno.textContent = getCurrentDate();
-        //Atualiza a hora de 1 em 1 segundo (1000 ticks == 1 segundo)
-        setInterval(printCurrentHour, 1000);
-    //Fim atualizações
+
+diaSemana.textContent = getWeekDay();
+diaMesAno.textContent = getCurrentDate();
+setInterval(printCurrentHour, 1000);
+
+const dialogData = document.getElementById("dialog-data");
+const dialogHora = document.getElementById("dialog-hora");
+const dialogPonto = document.getElementById("dialog-ponto");
+
+//------------------------------------------------------------------------------------------
+
+//Formulario de registro de ponto
+const btnBaterPonto = document.getElementById("btn-bater-ponto");
+btnBaterPonto.addEventListener("click", register);
+
 const nextRegister = {
     "entrada": "intervalo",
     "intervalo": "volta-intervalo", 
     "volta-intervalo": "saida", 
     "saida": "entrada"
 }
-let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-    if(lastTypeRegister) {
-        const typeRegister   = document.getElementById("tipos-ponto");
-        typeRegister.value   = nextRegister[lastTypeRegister];
-        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
-        document.getElementById("dialog-last-register").textContent = lastRegisterText;
-    }
-//Fim dados padrões
-
-
-//Alerta registro
-// TO-DO:
-// Problema: os 5 segundos continuam contando
-const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
-btnCloseAlertRegister.addEventListener("click", () => {
-    divAlertaRegistroPonto.classList.remove("show");
-    divAlertaRegistroPonto.classList.add("hidden");
-});
-//Fim alerta registro
-
-const dialogData = document.getElementById("dialog-data");
-const dialogHora = document.getElementById("dialog-hora");
-const dialogPonto = document.getElementById("dialog-ponto");
-//Fim registro
-
-//------------------------------------------------------------------------------------------
-
-//Registro
 
 function register() {
     dialogData.textContent = "Data: " + getCurrentDate();
@@ -114,8 +113,6 @@ function register() {
         document.getElementById("dialog-last-register").textContent = lastRegisterText;
     }
 
-    // TO-DO
-    // Como "matar" o intervalo a cada vez que o dialog é fechado?
     setInterval(() => {
         dialogHora.textContent = "Hora: " + getCurrentHour();
     }, 1000);
@@ -123,16 +120,6 @@ function register() {
     dialogPonto.showModal();
 }
 
-//Formulario de registro de ponto
-const btnBaterPonto = document.getElementById("btn-bater-ponto");
-btnBaterPonto.addEventListener("click", register);
-
-//Fechamento forms manual
-const btnDialogFechar = document.getElementById("btn-dialog-fechar");
-btnDialogFechar.addEventListener("click", () => {
-    dialogPonto.close();
-});
-//Fim fechamento manual
 
 //Regsitro e save do ponto
 const btnDialogBaterPonto = document.getElementById("btn-dialog-bater-ponto");
@@ -140,12 +127,9 @@ const divAlertaRegistroPonto = document.getElementById("alerta-registro-ponto");
 
 btnDialogBaterPonto.addEventListener("click", async () => {
     const typeRegister = document.getElementById("tipos-ponto");
-    let lastTypeRegister = localStorage.getItem("lastTypeRegister");
-
-    console.log(lastTypeRegister);
-
+    
     let userCurrentPosition = await getCurrentPosition();
-
+    
     let ponto = {
         "data": getCurrentDate(),
         "hora": getCurrentHour(),
@@ -153,36 +137,51 @@ btnDialogBaterPonto.addEventListener("click", async () => {
         "id": 1,
         "tipo": typeRegister.value
     }
-
-    console.log(ponto);
-
+    
     saveRegisterLocalStorage(ponto);
-
+    
     localStorage.setItem("lastDateRegister", ponto.data);
     localStorage.setItem("lastTimeRegister", ponto.hora);
-
+    
     dialogPonto.close();
-
+    
     divAlertaRegistroPonto.classList.remove("hidden");
     divAlertaRegistroPonto.classList.add("show");
-
+    
     setTimeout(() => {
         divAlertaRegistroPonto.classList.remove("show");
         divAlertaRegistroPonto.classList.add("hidden");
     }, 5000);
-
+    
 });
-//Fim resgistro save
 
-//Fim registro
+let lastTypeRegister = localStorage.getItem("lastTypeRegister");
+    if(lastTypeRegister) {
+        const typeRegister   = document.getElementById("tipos-ponto");
+        typeRegister.value   = nextRegister[lastTypeRegister];
+        let lastRegisterText = "Último registro: " + localStorage.getItem("lastDateRegister") + " - " + localStorage.getItem("lastTimeRegister") + " | " + localStorage.getItem("lastTypeRegister")
+        document.getElementById("dialog-last-register").textContent = lastRegisterText;
+    }
+
+
+const btnDialogFechar = document.getElementById("btn-dialog-fechar");
+btnDialogFechar.addEventListener("click", () => {
+    dialogPonto.close();
+});
+
+const btnCloseAlertRegister = document.getElementById("alerta-registro-ponto-fechar");
+btnCloseAlertRegister.addEventListener("click", () => {
+    divAlertaRegistroPonto.classList.remove("show");
+    divAlertaRegistroPonto.classList.add("hidden");
+});
 
 //------------------------------------------------------------------------------------------
 
-//Jusificativa
-function toggleFileInput() {
-    const fileInputContainer = document.getElementById("fileInputContainer");
-    fileInputContainer.style.display = document.getElementById("toggleFileCheckbox").checked ? "block" : "none";
-}
+// Botão para abrir o diálogo de justificativa
+const btnBaterJustificar = document.getElementById("btn-bater-justificar");
+btnBaterJustificar.addEventListener("click", registerJustificativa);
+
+
 
 function registerJustificativa() {
 
@@ -200,17 +199,6 @@ function registerJustificativa() {
 
     dialogJustificativa.showModal();
 }
-
-// Botão para abrir o diálogo de justificativa
-const btnBaterJustificar = document.getElementById("btn-bater-justificar");
-btnBaterJustificar.addEventListener("click", registerJustificativa);
-
-// Fechamento manual do formulário de justificativa
-const dialogJustificativa = document.getElementById("dialog-justificativa");
-const btnFecharJustificativa = document.getElementById("btn-dialog-fechar-justificatica");
-btnFecharJustificativa.addEventListener("click", () => {
-    dialogJustificativa.close();
-});
 
 // Botão para confirmar o registro da justificativa
 const btnDialogJustificativa = document.getElementById("btn-dialog-bater-justificativa");
@@ -247,7 +235,7 @@ btnDialogJustificativa.addEventListener("click", async () => {
     console.log(justificativa);
 
     // Salva o registro da justificativa no localStorage
-    saveRegisterLocalStorage(justificativa);
+    saveJustificativaLocalStorage(justificativa);
 
     // Atualiza o último registro da justificativa no localStorage
     localStorage.setItem("lastAbsenceDate", justificativa.data);
@@ -266,105 +254,15 @@ btnDialogJustificativa.addEventListener("click", async () => {
     }, 5000);
 });
 
-// Função para alternar a visibilidade do campo de arquivo
 function toggleFileInput() {
     const fileInputContainer = document.getElementById("fileInputContainer");
-    const checkbox = document.getElementById("toggleFileCheckbox");
-    if (checkbox.checked) {
-        fileInputContainer.style.display = "block";
-    } else {
-        fileInputContainer.style.display = "none";
-    }
-}
-//Fim justificativa
-
-//------------------------------------------------------------------------------------------
-
-//Inicio histórico
-
-function carregarHistorico() {
-    const registros = JSON.parse(localStorage.getItem("register")) || [];
-    console.log("Registros carregados:", registros); // Adiciona log para verificação
-    atualizarTabela(registros);
+    fileInputContainer.style.display = document.getElementById("toggleFileCheckbox").checked ? "block" : "none";
 }
 
-function filtrarHistorico(tipo) {
-    const registros = JSON.parse(localStorage.getItem("register")) || [];
+// Fechamento manual do formulário de justificativa
+const dialogJustificativa = document.getElementById("dialog-justificativa");
+const btnFecharJustificativa = document.getElementById("btn-dialog-fechar-justificatica");
+btnFecharJustificativa.addEventListener("click", () => {
+    dialogJustificativa.close();
+});
 
-    let registrosFiltrados;
-    if (tipo === 'ponto') {
-        registrosFiltrados = registros.filter(reg => 
-            reg.tipo === 'entrada' || reg.tipo === 'intervalo' || reg.tipo === 'volta-intervalo' || reg.tipo === 'saida'
-        );
-    } else if (tipo === 'justificativa') {
-        registrosFiltrados = registros.filter(reg => reg.tipo === 'justificativa');
-    } else {
-        registrosFiltrados = registros; // Todos os registros
-    }
-
-    console.log("Registros filtrados:", registrosFiltrados); // Verificação
-    atualizarTabela(registrosFiltrados);
-}
-
-
-
-// Atualizar a tabela com os dados filtrados
-function atualizarTabela(registros) {
-    const tbody = document.querySelector("#tabela-historico tbody");
-    tbody.innerHTML = ""; // Limpa a tabela
-
-    if (registros.length === 0) {
-        const row = document.createElement("tr");
-        const emptyCell = document.createElement("td");
-        emptyCell.textContent = "Nenhum registro encontrado";
-        emptyCell.colSpan = 4;
-        row.appendChild(emptyCell);
-        tbody.appendChild(row);
-        return;
-    }
-
-    registros.forEach(registro => {
-        const row = document.createElement("tr");
-
-        const dataCell = document.createElement("td");
-        dataCell.textContent = registro.data;
-        row.appendChild(dataCell);
-
-        const horaCell = document.createElement("td");
-        horaCell.textContent = registro.hora;
-        row.appendChild(horaCell);
-
-        const tipoCell = document.createElement("td");
-        tipoCell.textContent = registro.tipo;
-        row.appendChild(tipoCell);
-
-        const obsCell = document.createElement("td");
-        obsCell.textContent = registro.observacao || "-";
-        row.appendChild(obsCell);
-
-        const cellArquivo = row.insertCell();
-        if (registro.arquivoAnexado) {
-            const link = document.createElement("a");
-            link.href = registro.arquivoAnexado;
-            link.textContent = registro.nomeArquivo; // Exibe o nome do arquivo
-            link.target = "_blank"; // Abre em uma nova aba
-            cellArquivo.appendChild(link);
-        } else {
-            cellArquivo.textContent = "Nenhum"; // Indica ausência de arquivo
-        }
-
-        tbody.appendChild(row);
-    });
-}
-
-
-// Carrega o histórico ao abrir a página
-document.addEventListener("DOMContentLoaded", carregarHistorico);
-console.log(localStorage.getItem("register"));
-
-
-//Fim histórico
-
-//Armazenamento local dos dados
-let registerLocalStorage = getRegisterLocalStorage();
-//Fim armazenamento

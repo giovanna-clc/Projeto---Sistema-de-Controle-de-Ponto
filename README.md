@@ -77,7 +77,7 @@ relatório de marcações.
   ● Usuário deve poder editar os registros
 ○ Esses registros devem possuir marcação diferenciada no
 relatório de marcações.
-  *A fazer *
+  *Feito*
 ------------------------------------------------------------------------------------------
   ● Usuário deve poder visualizar um relatório com os horários de
 entrada e saída, inclusive de intervalos
@@ -94,7 +94,7 @@ não pode ser excluído;
 correspondência no localstorage.
 ○ Deve ser possível filtrar os registros por período
       ■ Último mês e última semana, no mínimo.
-
+  *Em desenvolvimento*
 ------------------------------------------------------------------------------------------
       
 Critérios de Avaliação
