@@ -71,6 +71,7 @@ function getJustificativaLocalStorage() {
 function saveJustificativaLocalStorage(register) {
     registerLocalStorageJusti.push(register);
     localStorage.setItem("justificativa", JSON.stringify(registerLocalStorageJusti));
+    console.log(localStorage.setItem("justificativa", JSON.stringify(registerLocalStorageJusti)));
 } 
 
 //------------------------------------------------------------------------------------------
@@ -185,13 +186,6 @@ btnBaterJustificar.addEventListener("click", registerJustificativa);
 
 function registerJustificativa() {
 
-    // Carrega a última justificativa registrada, se existir
-    let lastAbsenceDate = localStorage.getItem("lastAbsenceDate");
-    if (lastAbsenceDate) {
-        const lastAbsenceText = `Última justificativa: ${lastAbsenceDate} - ${localStorage.getItem("lastAbsenceTime")} | Arquivo anexado: ${localStorage.getItem("absenceFileAttached")}`;
-        document.getElementById("dialog-last-register-justificativa").textContent = lastAbsenceText;
-    }
-
     // Atualiza a hora a cada segundo
     setInterval(() => {
         document.getElementById("dialog-hora-justificativa").textContent = "Hora: " + getCurrentHour();
@@ -207,7 +201,7 @@ const divAlertaRegistroJustificativa = document.getElementById("alerta-registro-
 btnDialogJustificativa.addEventListener("click", async () => {
     const absenceDate = document.getElementById("absenceDate").value;
     const observationText = document.getElementById("observationText").value;
-    
+
     if (!absenceDate) {
         alert("Por favor, selecione uma data de ausência.");
         return;
@@ -217,42 +211,75 @@ btnDialogJustificativa.addEventListener("click", async () => {
     let userCurrentPosition = await getCurrentPosition();
 
     // Cria o objeto de justificativa
-    const absenceFile = document.getElementById("absenceFile").files[0]; // Obtenha o arquivo
+    const absenceFile = document.getElementById("absenceFile").files[0];
 
-    let justificativa = {
-        data: absenceDate,
-        hora: getCurrentHour(),
-        localizacao: userCurrentPosition,
-        id: 1, // ou outro ID único
-        tipo: "justificativa",
-        arquivoAnexado: absenceFile ? URL.createObjectURL(absenceFile) : "", // Gera URL temporária
-        nomeArquivo: absenceFile ? absenceFile.name : "", // Salva o nome do arquivo
-        observacao: observationText || "-"
-    };
+    if (absenceFile) {
+        const reader = new FileReader();
+        
+        // Lê o arquivo e cria a justificativa após o carregamento do arquivo
+        reader.onload = function(event) {
+            const arquivoBase64 = event.target.result;
 
+            let justificativa = {
+                data: absenceDate,
+                hora: getCurrentHour(),
+                localizacao: userCurrentPosition,
+                id: 1,
+                tipo: "justificativa",
+                arquivoAnexado: arquivoBase64,
+                nomeArquivo: absenceFile.name,
+                observacao: observationText || "-"
+            };
 
+            console.log(justificativa);
 
-    console.log(justificativa);
+            // Salva o registro da justificativa no localStorage
+            saveJustificativaLocalStorage(justificativa);
 
-    // Salva o registro da justificativa no localStorage
-    saveJustificativaLocalStorage(justificativa);
+            dialogJustificativa.close();
 
-    // Atualiza o último registro da justificativa no localStorage
-    localStorage.setItem("lastAbsenceDate", justificativa.data);
-    localStorage.setItem("lastAbsenceTime", justificativa.hora);
-    localStorage.setItem("absenceFileAttached", justificativa.arquivoAnexado);
+            // Mostra um alerta de registro da justificativa
+            divAlertaRegistroJustificativa.classList.remove("hidden");
+            divAlertaRegistroJustificativa.classList.add("show");
 
-    dialogJustificativa.close();
+            setTimeout(() => {
+                divAlertaRegistroJustificativa.classList.remove("show");
+                divAlertaRegistroJustificativa.classList.add("hidden");
+            }, 5000);
+        };
 
-    // Mostra um alerta de registro da justificativa
-    divAlertaRegistroJustificativa.classList.remove("hidden");
-    divAlertaRegistroJustificativa.classList.add("show");
+        reader.readAsDataURL(absenceFile);
+    } else {
+        // Se não houver arquivo, cria a justificativa sem o anexo
+        let justificativa = {
+            data: absenceDate,
+            hora: getCurrentHour(),
+            localizacao: userCurrentPosition,
+            id: 1,
+            tipo: "justificativa",
+            arquivoAnexado: null,
+            nomeArquivo: null,
+            observacao: observationText || "-"
+        };
 
-    setTimeout(() => {
-        divAlertaRegistroJustificativa.classList.remove("show");
-        divAlertaRegistroJustificativa.classList.add("hidden");
-    }, 5000);
+        console.log(justificativa);
+
+        // Salva o registro da justificativa no localStorage
+        saveJustificativaLocalStorage(justificativa);
+
+        dialogJustificativa.close();
+
+        // Mostra um alerta de registro da justificativa
+        divAlertaRegistroJustificativa.classList.remove("hidden");
+        divAlertaRegistroJustificativa.classList.add("show");
+
+        setTimeout(() => {
+            divAlertaRegistroJustificativa.classList.remove("show");
+            divAlertaRegistroJustificativa.classList.add("hidden");
+        }, 5000);
+    }
 });
+
 
 function toggleFileInput() {
     const fileInputContainer = document.getElementById("fileInputContainer");
