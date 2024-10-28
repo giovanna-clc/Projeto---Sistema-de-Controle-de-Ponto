@@ -179,6 +179,58 @@ btnCloseAlertRegister.addEventListener("click", () => {
 });
 
 //------------------------------------------------------------------------------------------
+const btnBaterPontoAntigo = document.getElementById("btn-bater-ponto-antigo");
+const dialogPontoVelho = document.getElementById("dialogPontoVelho");
+const btnCancelar = document.getElementById("btn-cancelar");
+const btnDialogBaterPontoAntigo = document.getElementById("btn-dialog-bater-ponto-antigo");
+
+// Evento para abrir o diálogo ao clicar no botão
+btnBaterPontoAntigo.addEventListener("click", () => {
+    dialogPontoVelho.showModal();
+});
+
+// Função para registrar ponto no passado
+btnDialogBaterPontoAntigo.addEventListener("click", async () => {
+    const data = document.getElementById("data-ponto").value;
+    const hora = document.getElementById("hora-ponto").value;
+    const tipo = document.getElementById("tipo-ponto").value;
+    const observationText = document.getElementById("observationText").value;
+
+    // Validação dos campos
+    if (!data || !hora || !tipo) {
+        showNotification("Por favor, preencha todos os campos.");
+        return;
+    }
+
+    // Formatação dos dados
+    const dataFormatada = data.split('-').reverse().join('/');
+    const horaFormatada = hora;
+
+    // Criação do objeto ponto
+    let ponto = {
+        "data": dataFormatada,
+        "hora": horaFormatada,
+        "localizacao": userCurrentPosition,
+        "id": Date.now(),
+        "tipo": tipo,
+        "observacao": observationText || "-"
+    };
+
+    // Salvar no Local Storage
+    const registros = getRegisterLocalStorage();
+    registros.push(ponto);
+    saveRegisterLocalStorage(registros);
+
+    // Resetar o formulário e fechar o diálogo
+    document.getElementById("form-ponto-passado").reset();
+    dialogPontoVelho.close();
+});
+
+btnCancelar.addEventListener("click", () => {
+    dialogPontoVelho.close();
+});
+
+//------------------------------------------------------------------------------------------
 
 // Botão para abrir o diálogo de justificativa
 const btnBaterJustificar = document.getElementById("btn-bater-justificar");
@@ -209,7 +261,7 @@ btnDialogJustificativa.addEventListener("click", async () => {
         return;
     }
 
-    // Obtém a posição atual do usuário (se necessário)
+    // Obtém a posição atual do usuário
     let userCurrentPosition = await getCurrentPosition();
 
     // Cria o objeto de justificativa

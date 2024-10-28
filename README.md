@@ -58,7 +58,7 @@ ao atual)
     ○ Esse registro deve possuir uma marcação diferenciada no
 relatório de marcações;
     ○ Não deve ser permitida marcação em data futura
-  *A fazer*
+  *Em desenvolvimento*
 ------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar uma justificativa para uma ausência,
 inclusive com a possibilidade de fazer um upload de arquivo;
@@ -94,7 +94,7 @@ não pode ser excluído;
 correspondência no localstorage.
 ○ Deve ser possível filtrar os registros por período
       ■ Último mês e última semana, no mínimo.
-  *Em desenvolvimento*
+  *Feito*
 ------------------------------------------------------------------------------------------
       
 Critérios de Avaliação

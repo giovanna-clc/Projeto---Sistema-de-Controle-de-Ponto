@@ -76,6 +76,12 @@ function getJustificativasLocalStorage() {
 //------------------------------------------------------------------------------------------
 
 // Função para exibir registros na tabela
+function toggleFileInput() {
+    const fileInputContainer = document.getElementById("fileInputContainer");
+    fileInputContainer.style.display = document.getElementById("toggleFileCheckbox").checked ? "block" : "none";
+    renderHistorico();
+}
+
 function renderHistorico(filter) {
     const tabelaBody = document.getElementById('tabela-historico').getElementsByTagName('tbody')[0];
     tabelaBody.innerHTML = '';
@@ -96,21 +102,25 @@ function renderHistorico(filter) {
             ...justificativas.map((item, index) => ({ ...item, originalIndex: index, tipoRegistro: 'justificativa' }))
         ];
     }
+
+    // Obter os valores das datas personalizadas
+    const startDateInput = document.getElementById("start-date").value;
+    const endDateInput = document.getElementById("end-date").value;
     
+    // Filtrar registros apenas se o checkbox de arquivos não estiver marcado
+    const filDate = document.getElementById("toggleFileCheckbox").checked;
 
-    const filterPeriod = document.getElementById("filter-period").value;
-    registrosFiltrados = filterRecordsByPeriod(registrosFiltrados, filterPeriod);
-
-    if (registrosFiltrados.length === 0) {
-        tabelaBody.innerHTML = '<tr><td colspan="5">Nenhum registro encontrado para o período selecionado.</td></tr>';
-        return;
+    // Se não houver necessidade de filtrar por arquivo, aplique a filtragem de data personalizada
+    if (filDate) {
+        registrosFiltrados = filterRecordsByCustomDate(registrosFiltrados, startDateInput, endDateInput);
+        
+        if (registrosFiltrados.length === 0) {
+            tabelaBody.innerHTML = '<tr><td colspan="5">Nenhum registro encontrado para o período selecionado.</td></tr>';
+            return;
+        }
     }
 
-    if (registrosFiltrados.length === 0) {
-        tabelaBody.innerHTML = '<tr><td colspan="5">Nenhum registro encontrado para o filtro selecionado.</td></tr>';
-        return;
-    }
-
+    // Exibir registros na tabela
     registrosFiltrados.forEach((item) => {
         const row = tabelaBody.insertRow();
         row.insertCell(0).textContent = item.data || item.dataAusencia;
@@ -136,57 +146,20 @@ function renderHistorico(filter) {
     });
 }
 
-// Função para aplicar filtro de data
-function filterRecordsByPeriod(records, period) {
-    const now = new Date();
-    let filteredRecords = records;
-    
-    if (period === 'last-week') {
-        const oneWeekAgo = new Date(now);
-        oneWeekAgo.setDate(now.getDate() - 7);
-        filteredRecords = records.filter(record => {
-            const recordDate = new Date(record.data || record.dataAusencia);
-            return recordDate >= oneWeekAgo && recordDate <= now;
-        });
-    } else if (period === 'last-month') {
-        const oneMonthAgo = new Date(now);
-        oneMonthAgo.setMonth(now.getMonth() - 1);
-        filteredRecords = records.filter(record => {
-            const recordDate = new Date(record.data || record.dataAusencia);
-            return recordDate >= oneMonthAgo && recordDate <= now;
-        });
-    } else if (period === 'custom') {
-        const startDateInput = document.getElementById("start-date").value;
-        const endDateInput = document.getElementById("end-date").value;
+
+// Função para aplicar filtro de data personalizada
+function filterRecordsByCustomDate(records, startDateInput, endDateInput) {
+    if (startDateInput && endDateInput) {
+        const startDate = new Date(startDateInput);
+        const endDate = new Date(endDateInput);
+        endDate.setHours(23, 59, 59, 999);
         
-        if (startDateInput && endDateInput) {
-            const startDate = new Date(startDateInput);
-            const endDate = new Date(endDateInput);
-            if (startDate > endDate) {
-                alert("A data inicial não pode ser posterior à data final.");
-                return [];
-            } else {
-                endDate.setHours(23, 59, 59, 999);
-                filteredRecords = records.filter(record => {
-                    const recordDate = new Date(record.data || record.dataAusencia);
-                    return recordDate >= startDate && recordDate <= endDate;
-                });
-            }
-        } else {
-            alert("Por favor, selecione as datas inicial e final.");
-            return [];
-        }
+        return records.filter(record => {
+            const recordDate = new Date(record.data || record.dataAusencia);
+            return recordDate >= startDate && recordDate <= endDate;
+        });
+    } else {
+        alert("Por favor, selecione as datas inicial e final.");
+        return [];
     }
-    return filteredRecords;
 }
-
-function toggleCustomDateFields() {
-    const filterPeriod = document.getElementById("filter-period").value;
-    const customDateRange = document.getElementById("custom-date-range");
-    customDateRange.style.display = (filterPeriod === 'custom') ? 'flex' : 'none';
-}
-
-document.getElementById("filter-period").addEventListener("change", () => {
-    toggleCustomDateFields();
-    renderHistorico();
-});
