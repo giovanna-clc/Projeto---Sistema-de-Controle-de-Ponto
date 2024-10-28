@@ -58,7 +58,7 @@ ao atual)
     ○ Esse registro deve possuir uma marcação diferenciada no
 relatório de marcações;
     ○ Não deve ser permitida marcação em data futura
-  *Em desenvolvimento*
+  *Feito*
 ------------------------------------------------------------------------------------------
   ● Usuário deve poder registrar uma justificativa para uma ausência,
 inclusive com a possibilidade de fazer um upload de arquivo;
