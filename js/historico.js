@@ -86,14 +86,13 @@ function renderHistorico(filter) {
     const tabelaBody = document.getElementById('tabela-historico').getElementsByTagName('tbody')[0];
     tabelaBody.innerHTML = '';
 
-    // Obter registros e justificativas do Local Storage
     const registros = getRegisterLocalStorage();
     const justificativas = getJustificativasLocalStorage();
 
-    // Escolher quais registros exibir de acordo com o filtro selecionado
     let registrosFiltrados = [];
     if (filter === 'registro') {
         registrosFiltrados = registros.map((item, index) => ({ ...item, originalIndex: index, tipoRegistro: 'registro' }));
+        console.log(registrosFiltrados)
     } else if (filter === 'justificativa') {
         registrosFiltrados = justificativas.map((item, index) => ({ ...item, originalIndex: index, tipoRegistro: 'justificativa' }));
     } else {
@@ -103,14 +102,11 @@ function renderHistorico(filter) {
         ];
     }
 
-    // Obter os valores das datas personalizadas
     const startDateInput = document.getElementById("start-date").value;
     const endDateInput = document.getElementById("end-date").value;
     
-    // Filtrar registros apenas se o checkbox de arquivos não estiver marcado
     const filDate = document.getElementById("toggleFileCheckbox").checked;
 
-    // Se não houver necessidade de filtrar por arquivo, aplique a filtragem de data personalizada
     if (filDate) {
         registrosFiltrados = filterRecordsByCustomDate(registrosFiltrados, startDateInput, endDateInput);
         
@@ -120,7 +116,6 @@ function renderHistorico(filter) {
         }
     }
 
-    // Exibir registros na tabela
     registrosFiltrados.forEach((item) => {
         const row = tabelaBody.insertRow();
         row.insertCell(0).textContent = item.data || item.dataAusencia;
@@ -130,7 +125,6 @@ function renderHistorico(filter) {
 
         const actionsCell = row.insertCell(4);
 
-        // Exibe ações específicas para cada tipo de item
         if (item.tipoRegistro === 'registro') {
             actionsCell.innerHTML = `
                 <button onclick="editRecord(${item.originalIndex})">Editar</button>

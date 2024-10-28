@@ -54,37 +54,38 @@
         <!--Fim cadastro-->
         </dialog>
 
-        <!-- Formulário de registro de ponto no passado -->
-        <div id="div-btn-bater-ponto-antigo">
-            <button id="btn-bater-ponto-antigo">Ponto Antigo</button> <!-- Botão de abertura do form -->
-        </div>
+    <!-- Formulário de registro de ponto no passado -->
+    <div id="div-btn-bater-ponto-antigo">
+        <button id="btn-bater-ponto-antigo">Ponto Antigo</button> <!-- Botão de abertura do form -->
+    </div>
 
-        <dialog id="dialogPontoVelho">
-            <h2>Registrar Pontos no Passado</h2>
-            <form id="form-ponto-passado" class="form-ponto-passado">
-                <label for="data-ponto">Data:</label>
-                <input type="date" id="data-ponto" required>
+    <dialog id="dialogPontoVelho">
+        <h2>Registrar Pontos no Passado</h2>
+        <form id="form-ponto-passado" class="form-ponto-passado">
+            <label for="data-ponto">Data:</label>
+            <input type="date" id="data-ponto" required>
 
-                <label for="hora-ponto">Hora:</label>
-                <input type="time" id="hora-ponto" required>
+            <label for="hora-ponto">Hora:</label>
+            <input type="time" id="hora-ponto" required>
 
-                <label for="tipo-ponto">Tipo:</label>
-                <select id="tipo-ponto" required>
-                    <option value="">Selecione</option>
-                    <option value="Entrada">Entrada</option>
-                    <option value="Saída">Saída</option>
-                    <option value="Intervalo">Intervalo</option>
-                    <option value="Volta do Intervalo">Volta do Intervalo</option>
-                </select>
+            <label for="tipo-ponto">Tipo:</label>
+            <select id="tipo-ponto" required>
+                <option value="">Selecione</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Saída">Saída</option>
+                <option value="Intervalo">Intervalo</option>
+                <option value="Volta do Intervalo">Volta do Intervalo</option>
+            </select>
 
-                <p></p>
-                <textarea id="observationText" placeholder="Observação (opcional)" rows="3"></textarea>
-                <p></p>
+            <p></p>
+            <textarea id="observationText1" placeholder="Observação (opcional)" rows="3"></textarea>
+            <p></p>
 
-                <button type="btn-dialog-bater-ponto-antigo">Registrar</button>
-                <button type="button" id="btn-cancelar">Cancelar</button>
-            </form>
-        </dialog>
+            <button type="button" id="btn-dialog-bater-ponto-antigo">Registrar</button>
+            <button type="button" id="btn-cancelar">Cancelar</button>
+        </form>
+    </dialog>
+
 
 
         <!--Fim dados padrões-->

@@ -58,6 +58,11 @@ function saveRegisterLocalStorage(register) {
     registerLocalStorage.push(register); // Array
     localStorage.setItem("register", JSON.stringify(registerLocalStorage));
     localStorage.setItem("lastTypeRegister", typeRegister.value);
+}
+
+function saveRegisterLocalStorage0(register) {
+    registerLocalStorage.push(register); // Array
+    localStorage.setItem("register", JSON.stringify(registerLocalStorage));
 } 
 
 let registerLocalStorageJusti = getJustificativaLocalStorage();
@@ -194,7 +199,10 @@ btnDialogBaterPontoAntigo.addEventListener("click", async () => {
     const data = document.getElementById("data-ponto").value;
     const hora = document.getElementById("hora-ponto").value;
     const tipo = document.getElementById("tipo-ponto").value;
-    const observationText = document.getElementById("observationText").value;
+    const observationText = document.getElementById("observationText1").value;
+
+    // Verifique se getCurrentPosition está implementado corretamente
+    let userCurrentPosition = await getCurrentPosition();
 
     // Validação dos campos
     if (!data || !hora || !tipo) {
@@ -210,22 +218,23 @@ btnDialogBaterPontoAntigo.addEventListener("click", async () => {
     let ponto = {
         "data": dataFormatada,
         "hora": horaFormatada,
-        "localizacao": userCurrentPosition,
-        "id": Date.now(),
+        "localizacao": userCurrentPosition || "Localização não disponível", // Adicione um valor padrão se a localização não estiver disponível
+        "id": Date.now(), // ID único baseado no timestamp
         "tipo": tipo,
         "observacao": observationText || "-"
     };
 
-    // Salvar no Local Storage
-    const registros = getRegisterLocalStorage();
-    registros.push(ponto);
-    saveRegisterLocalStorage(registros);
+    console.log(ponto); // Para verificar o objeto no console
+
+    // Salvar ponto no Local Storage, sobrescrevendo qualquer registro anterior
+    saveRegisterLocalStorage0(ponto);
 
     // Resetar o formulário e fechar o diálogo
     document.getElementById("form-ponto-passado").reset();
     dialogPontoVelho.close();
 });
 
+// Evento para cancelar o registro e fechar o diálogo
 btnCancelar.addEventListener("click", () => {
     dialogPontoVelho.close();
 });
